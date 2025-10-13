@@ -31,7 +31,7 @@ export function Navbar() {
               className="btn-outline"
               aria-label="Toggle theme"
             >
-              {theme === "dark" ? "Light" : "Dark"} Mode
+              {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
             </button>
           )}
         </nav>
