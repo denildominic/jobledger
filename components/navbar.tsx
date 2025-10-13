@@ -13,7 +13,7 @@ export function Navbar() {
     <header className="border-b border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-950/60 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50">
       <div className="container py-3 flex items-center gap-4">
         <Link href="/" className="font-extrabold text-xl">
-          AI Job Finder
+          Job Finder 2025
         </Link>
         <nav className="ml-auto flex items-center gap-3">
           <Link href="/jobs" className="btn-outline">
