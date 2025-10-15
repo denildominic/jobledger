@@ -1,16 +1,7 @@
 "use client";
-
-import { useState } from "react";
-import type { Job } from "@/lib/store";
-
-export default function ResumeMatchForm({
-  jobs,
-  initialJobId,
-}: {
-  jobs: Job[];
-  initialJobId?: string;
-}) {
-  const [jobId, setJobId] = useState(initialJobId || jobs[0]?.id);
+import { useEffect, useRef, useState } from "react";
+export default function ResumeMatchForm() {
+  const [jobTitle, setJobTitle] = useState("Full-Stack Engineer");
   const [text, setText] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
@@ -19,17 +10,15 @@ export default function ResumeMatchForm({
     overlap: string[];
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  const ref = useRef<number | null>(null);
+  async function compute() {
     setLoading(true);
     setError(null);
-    setResult(null);
     try {
       const form = new FormData();
       if (file) form.append("file", file);
       form.append("text", text);
-      form.append("jobId", jobId || "");
+      form.append("jobTitle", jobTitle);
       const res = await fetch("/api/resume/match", {
         method: "POST",
         body: form,
@@ -37,27 +26,33 @@ export default function ResumeMatchForm({
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
       setResult(data);
-    } catch (err: any) {
-      setError(err.message || "Something went wrong");
+    } catch (e: any) {
+      setError(e.message || "Error");
     } finally {
       setLoading(false);
     }
   }
-
+  useEffect(() => {
+    if (ref.current) window.clearTimeout(ref.current);
+    ref.current = window.setTimeout(() => {
+      if (jobTitle.trim() || text.trim() || file) compute();
+    }, 600);
+  }, [jobTitle, text, file]);
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
-      <label className="block text-sm font-medium">Select job</label>
-      <select
-        value={jobId}
-        onChange={(e) => setJobId(e.target.value)}
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        compute();
+      }}
+      className="space-y-4"
+    >
+      <label className="block text-sm font-medium">Target job title</label>
+      <input
+        value={jobTitle}
+        onChange={(e) => setJobTitle(e.target.value)}
         className="w-full rounded-xl border px-3 py-2 bg-transparent"
-      >
-        {jobs.map((j) => (
-          <option key={j.id} value={j.id}>
-            {j.title} — {j.company}
-          </option>
-        ))}
-      </select>
+        placeholder="e.g., Android Engineer, Data Engineer, Frontend Engineer"
+      />
 
       <div className="grid gap-2">
         <label className="block text-sm font-medium">
@@ -77,13 +72,10 @@ export default function ResumeMatchForm({
           placeholder="Paste resume text..."
         />
       </div>
-
       <button className="btn" disabled={loading}>
         {loading ? "Scoring…" : "Get Match Score"}
       </button>
-
       {error && <div className="text-red-600 dark:text-red-400">{error}</div>}
-
       {result && (
         <div className="mt-4 rounded-xl border p-4 border-slate-200 dark:border-slate-800">
           <div className="text-lg font-semibold">
