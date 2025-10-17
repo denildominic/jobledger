@@ -1,45 +1,40 @@
-import { Store } from "@/lib/store";
+import { getLocalJobById } from "@/lib/jobs";
+import { adzunaGetById } from "@/lib/adzu";
 import Link from "next/link";
-
-export default async function JobDetail({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const job = Store.getJobs().find((j) => j.id === params.id);
-  if (!job) return <div className="container py-10">Job not found.</div>;
-
+export default async function JobPage({ params }: { params: { id: string } }) {
+  const id = Array.isArray(params.id) ? params.id.join("/") : params.id;
+  const local = getLocalJobById(id);
+  const remote = await adzunaGetById(id);
+  const job = local ?? remote;
+  if (!job) return <div>Job not found.</div>;
   return (
-    <section className="container py-10">
-      <Link href="/jobs" className="text-sm opacity-70 hover:opacity-100">
-        ← Back to jobs
-      </Link>
-      <h1 className="mt-2 text-3xl font-bold">{job.title}</h1>
-      <p className="opacity-80">
-        {job.company} • {job.location} • {job.type}
-      </p>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {job.tags.map((t) => (
-          <span
-            key={t}
-            className="text-xs px-2 py-1 rounded-full border border-slate-300 dark:border-slate-700"
-          >
-            {t}
-          </span>
-        ))}
+    <main className="space-y-4">
+      <h1 className="text-2xl font-semibold">{job.title}</h1>
+      <div className="opacity-80">
+        {job.company} · {job.location}
       </div>
-      <div className="prose dark:prose-invert mt-6 max-w-none">
-        <p>{job.description}</p>
-      </div>
-
-      <div className="mt-6 flex gap-3">
-        <Link href={`/resume-match?jobId=${job.id}`} className="btn">
-          Match my resume
-        </Link>
-        <Link href="/dashboard" className="btn-outline">
-          Save to Dashboard
+      {job.salary && <div>{job.salary}</div>}
+      {job.tags && (
+        <div className="flex gap-2 flex-wrap">
+          {job.tags.map((t) => (
+            <span
+              key={t}
+              className="text-xs border border-slate-600 px-2 py-1 rounded-full"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+      )}
+      <p className="whitespace-pre-wrap leading-7">{job.description}</p>
+      <div className="pt-4">
+        <Link
+          className="btn"
+          href={`/resume-match?jobId=${encodeURIComponent(id)}`}
+        >
+          Match my resume to this job
         </Link>
       </div>
-    </section>
+    </main>
   );
 }
