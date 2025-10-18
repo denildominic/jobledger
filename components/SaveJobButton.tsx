@@ -1,22 +1,30 @@
+// components/SaveJobButton.tsx
 "use client";
 import { useState, useTransition } from "react";
 
+type SavedJob = {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+};
+
 export default function SaveJobButton({
-  jobId,
-  initiallySaved = false,
+  job,
+  initiallySaved,
 }: {
-  jobId: string;
-  initiallySaved?: boolean;
+  job: SavedJob;
+  initiallySaved: boolean;
 }) {
   const [saved, setSaved] = useState(initiallySaved);
   const [pending, start] = useTransition();
 
-  async function toggle() {
+  function toggle() {
     start(async () => {
       const res = await fetch(saved ? "/api/unsave" : "/api/save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ jobId }),
+        body: JSON.stringify(saved ? { jobId: job.id } : { job }),
       });
       if (res.ok) setSaved(!saved);
     });
