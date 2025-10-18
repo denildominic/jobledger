@@ -6,23 +6,19 @@ import type { Job } from "@/lib/jobs";
 export default async function ResumeMatchPage({
   searchParams,
 }: {
-  // ⬇️ In Next 15, searchParams must be awaited
-  searchParams: Promise<{ jobId?: string }>;
+  // Next.js 15: searchParams is a Promise
+  searchParams: Promise<{ jobId?: string; jobTitle?: string }>;
 }) {
-  const { jobId } = await searchParams;
+  const { jobId, jobTitle } = await searchParams;
 
-  const jobs: Job[] = Store.getJobs();
-  // type j and normalize to string for safe compare
-  const selected =
-    jobs.find((j: Job) => String(j.id) === String(jobId)) ?? jobs[0] ?? null;
+  // Start with explicit jobTitle if present, else default
+  let initialJobTitle = jobTitle ?? "Full-Stack Engineer";
 
-  if (!jobs.length) {
-    return (
-      <section className="container py-10">
-        <h1 className="text-3xl font-bold">Resume Match</h1>
-        <p className="opacity-80 mt-2">No jobs available to match against.</p>
-      </section>
-    );
+  // If jobId is present, try to pull the job title from your store
+  if (jobId) {
+    const jobs: Job[] = Store.getJobs(); // if this is async, use: const jobs = await Store.getJobs();
+    const selected = jobs.find((j) => String(j.id) === String(jobId));
+    if (selected?.title) initialJobTitle = selected.title;
   }
 
   return (
@@ -35,7 +31,8 @@ export default async function ResumeMatchPage({
 
       <div className="mt-6 grid md:grid-cols-2 gap-6">
         <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
-          <ResumeMatchForm jobs={jobs} initialJobId={selected?.id} />
+          {/* ✅ pass the resolved title */}
+          <ResumeMatchForm initialJobTitle={initialJobTitle} />
         </div>
 
         <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
