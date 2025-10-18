@@ -4,8 +4,11 @@ import { Store } from "@/lib/store";
 import { verifyJwt } from "@/lib/auth";
 
 export default async function DashboardPage() {
-  const token = (await cookies()).get("token")?.value;
-  if (!token)
+  // In your Next version, cookies() returns a Promise
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+
+  if (!token) {
     return (
       <section className="container py-10">
         <h1 className="text-3xl font-bold">Dashboard</h1>
@@ -18,16 +21,19 @@ export default async function DashboardPage() {
         </p>
       </section>
     );
+  }
+
   let userId: string | null = null;
   try {
     const payload: any = await verifyJwt(token);
-    userId = payload?.user?.id || null;
+    userId = (payload?.user?.id as string) ?? null;
   } catch {}
+
   const users = Store.getUsers();
-  const user = users.find((u) => u.id === userId);
-  const jobs = Store.getJobs().filter((j) =>
-    user?.savedJobIds.includes(j.id || "")
-  );
+  const user = users.find((u) => u.id === userId) ?? null;
+
+  const saved = new Set(user?.savedJobIds ?? []);
+  const jobs = Store.getJobs().filter((j) => j.id && saved.has(j.id!));
 
   return (
     <section className="container py-10">
