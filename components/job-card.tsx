@@ -1,7 +1,14 @@
 import Link from "next/link";
 import type { Job } from "@/lib/store";
+import SaveJobButton from "./SaveJobButton";
 
-export function JobCard({ job }: { job: Job }) {
+export function JobCard({
+  job,
+  initiallySaved = false,
+}: {
+  job: Job;
+  initiallySaved?: boolean;
+}) {
   return (
     <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-5 hover:shadow-md transition">
       <div className="flex items-start justify-between gap-4">
@@ -26,7 +33,9 @@ export function JobCard({ job }: { job: Job }) {
           <div className="text-xs opacity-70">Posted {job.postedAt}</div>
         </div>
       </div>
+
       <p className="mt-3 line-clamp-2 opacity-80">{job.description}</p>
+
       <div className="mt-4 flex gap-2">
         <Link href={`/jobs/${job.id}`} className="btn">
           View
@@ -34,6 +43,7 @@ export function JobCard({ job }: { job: Job }) {
         <Link href={`/resume-match?jobId=${job.id}`} className="btn-outline">
           Match my resume
         </Link>
+        <SaveJobButton jobId={String(job.id)} initiallySaved={initiallySaved} />
       </div>
     </div>
   );
