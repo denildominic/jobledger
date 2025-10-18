@@ -3,6 +3,11 @@ import { useEffect, useRef, useState } from "react";
 
 type Props = { initialJobTitle?: string };
 
+type MatchResult = {
+  score: number; // 0..1 (your UI multiplies by 100)
+  overlap: string[];
+};
+
 export default function ResumeMatchForm({
   initialJobTitle = "Full-Stack Engineer",
 }: Props) {
@@ -10,47 +15,67 @@ export default function ResumeMatchForm({
   const [text, setText] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<{
-    score: number;
-    overlap: string[];
-  } | null>(null);
+  const [result, setResult] = useState<MatchResult | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const ref = useRef<number | null>(null);
+
+  const timeoutRef = useRef<number | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
   async function compute() {
+    // guard: nothing to score
+    if (!(jobTitle.trim() && (text.trim() || file))) return;
+
+    // cancel previous request if still running
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     setLoading(true);
     setError(null);
     try {
       const form = new FormData();
       if (file) form.append("file", file);
-      form.append("text", text);
+      form.append("text", text); // <-- API expects "text"
       form.append("jobTitle", jobTitle);
+
       const res = await fetch("/api/resume/match", {
         method: "POST",
         body: form,
+        signal: controller.signal,
       });
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
+      if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg || "Request failed");
+      }
+      const data: MatchResult = await res.json();
       setResult(data);
-    } catch (e: any) {
-      setError(e.message || "Error");
+    } catch (e: unknown) {
+      if ((e as any)?.name === "AbortError") return; // ignore cancels
+      const msg = e instanceof Error ? e.message : "Error";
+      setError(msg);
     } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    if (ref.current) window.clearTimeout(ref.current);
-    ref.current = window.setTimeout(() => {
-      if (jobTitle.trim() || text.trim() || file) compute();
+    if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+    timeoutRef.current = window.setTimeout(() => {
+      void compute();
     }, 600);
-  }, [jobTitle, text, file]);
+    return () => {
+      if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+      // optional: abort pending request when inputs change rapidly
+      abortRef.current?.abort();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jobTitle, text, file]); // compute is stable enough here
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        compute();
+        void compute();
       }}
       className="space-y-4"
     >
