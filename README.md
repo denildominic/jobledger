@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+AI Job Finder
 
-## Getting Started
+A modern, full‑stack web app that helps people discover roles they love, instantly scan postings against their resume, and apply with confidence. It includes authentication, a beautiful dashboard, dark/light themes, a fast job search with filters, and an AI‑powered Resume Match that scores fit against any job title or description.
 
-First, run the development server:
+Built with Next.js (App Router), TypeScript, Tailwind CSS v4, Prisma, and your choice of job + AI providers.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+✨ Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Secure Auth – OAuth (Google/GitHub) or email magic link via NextAuth.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Job Search – Query by keyword/location; filter by salary, remote/on‑site, experience.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Apply Flow – Open application links, save jobs, track statuses (Saved → Applied → Interview → Offer → Rejected).
 
-## Learn More
+Resume Match (AI) – Upload a resume (PDF/DOCX) and enter any job title/description to get an instant match score with strengths & gaps.
 
-To learn more about Next.js, take a look at the following resources:
+Smart Dashboard – Recent searches, saved jobs, applications timeline, and reminders.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Dark/Light Mode – System‑aware theme with smooth toggles.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Responsive UI – Accessible, keyboard‑friendly, mobile‑first.
 
-## Deploy on Vercel
+🧱 Tech Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Frontend: Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS v4, shadcn/ui, lucide-react
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Backend: Next.js Route Handlers (API), Prisma ORM
+
+Database: PostgreSQL (Neon/Supabase/Railway/PlanetScale\*), SQLite for local dev
+
+Auth: NextAuth (Auth.js) – Google/GitHub providers or Email
+
+Storage: Local (dev) or S3/Cloudinary for resumes
+
+AI: Embeddings + scoring (OpenAI or compatible)
+
+Job Data: Choose one provider (e.g., JSearch on RapidAPI, Remotive, Adzuna, or a custom source)
+
+PlanetScale is MySQL; Prisma supports both. Use Postgres for simplicity unless you prefer MySQL.
