@@ -1,30 +1,17 @@
-import { SignJWT, jwtVerify } from 'jose';
-import { cookies } from 'next/headers';
+// lib/auth.ts
+import { SignJWT, jwtVerify } from "jose";
 
-const alg = 'HS256';
+const secret = new TextEncoder().encode(process.env.JWT_SECRET || "dev-secret");
 
-export async function signJwt(payload: object) {
-  const secret = new TextEncoder().encode(process.env.JWT_SECRET || 'dev_secret_change_me');
-  return await new SignJWT({ ...payload })
-    .setProtectedHeader({ alg })
+export async function signJwt(payload: any, expiresIn = "30d") {
+  return await new SignJWT(payload)
+    .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime('7d')
+    .setExpirationTime(expiresIn)
     .sign(secret);
 }
 
 export async function verifyJwt(token: string) {
-  const secret = new TextEncoder().encode(process.env.JWT_SECRET || 'dev_secret_change_me');
-  const { payload } = await jwtVerify(token, secret, { algorithms: [alg] });
+  const { payload } = await jwtVerify(token, secret);
   return payload;
-}
-
-export async function getUserFromCookie() {
-  const token = (await cookies()).get('token')?.value;
-  if (!token) return null;
-  try {
-    const payload = await verifyJwt(token) as any;
-    return payload.user as { id: string, email: string, name: string };
-  } catch {
-    return null;
-  }
 }
