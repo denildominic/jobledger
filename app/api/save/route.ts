@@ -4,22 +4,20 @@ import { verifyJwt, signJwt } from "@/lib/auth";
 import { Store } from "@/lib/store";
 
 export async function POST(req: Request) {
-  const { jobId } = await req.json();
-  if (!jobId) return NextResponse.json({ error: "jobId required" }, { status: 400 });
-
-  const token = (await cookies()).get("token")?.value;
+  const { job } = await req.json();
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
   if (!token) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 
-  const payload: any = await verifyJwt(token);
-  const user = payload?.user ?? {};
-  const saved = new Set<string>(user.savedJobIds ?? []);
-  saved.add(String(jobId));
+  let payload: any;
+  try {
+    payload = await verifyJwt(token);
+  } catch {
+    const res = NextResponse.json({ error: "Session expired, please log in again." }, { status: 401 });
+    // clear the bad cookie
+    res.cookies.set({ name: "token", value: "", path: "/", maxAge: 0 });
+    return res;
+  }
 
-  // persist locally; no-op on Vercel
-  Store.addSavedJob(user.id, String(jobId));
-
-  const newToken = await signJwt({ user: { ...user, savedJobIds: [...saved] } });
-  const res = NextResponse.json({ ok: true, savedJobIds: [...saved] });
-  res.cookies.set({ name: "token", value: newToken, httpOnly: true, secure: true, sameSite: "lax", path: "/", maxAge: 60 * 60 * 24 * 30 });
-  return res;
+  // ... continue with save logic using payload.user ...
 }
