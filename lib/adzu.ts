@@ -44,7 +44,7 @@ export async function adzunaSearch(query: string) {
   const url = new URL("https://api.adzuna.com/v1/api/jobs/us/search/1");
   url.searchParams.set("app_id", APP_ID);
   url.searchParams.set("app_key", APP_KEY);
-  url.searchParams.set("results_per_page", "20");
+  url.searchParams.set("results_per_page", "100");
   if (query) url.searchParams.set("what", query);
 
   const res = await fetch(url.toString(), { next: { revalidate: 60 } });
