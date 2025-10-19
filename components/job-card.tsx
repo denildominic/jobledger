@@ -43,15 +43,7 @@ export function JobCard({
         <Link href={`/resume-match?jobId=${job.id}`} className="btn-outline">
           Match my resume
         </Link>
-        <SaveJobButton
-          job={{
-            id: String(job.id),
-            title: job.title,
-            company: job.company,
-            location: job.location,
-          }}
-          initiallySaved={initiallySaved}
-        />
+        <SaveJobButton jobId={String(job.id)} initiallySaved={initiallySaved} />
       </div>
     </div>
   );
