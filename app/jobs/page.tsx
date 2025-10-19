@@ -6,21 +6,35 @@ import type { Job } from "@/lib/store";
 export default function JobsPage() {
   const [q, setQ] = useState("");
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
+
   async function load(query: string) {
     setLoading(true);
     const res = await fetch(`/api/jobs/search?q=${encodeURIComponent(query)}`);
-    const data = await res.json();
+    const data: Job[] = await res.json();
     setJobs(data);
     setLoading(false);
   }
+
+  // initial load + fetch saved ids from your JWT (fresh, not cached)
   useEffect(() => {
     load("");
+    (async () => {
+      const me = await fetch("/api/me", {
+        cache: "no-store",
+        credentials: "same-origin",
+      }).then((r) => r.json());
+      setSavedIds(new Set((me?.savedJobIds ?? []).map((x: any) => String(x))));
+    })();
   }, []);
+
+  // debounce search
   useEffect(() => {
     const id = setTimeout(() => load(q), 400);
     return () => clearTimeout(id);
   }, [q]);
+
   return (
     <section className="container py-10">
       <div className="flex items-end justify-between gap-4">
@@ -37,12 +51,19 @@ export default function JobsPage() {
           className="w-full md:w-96 rounded-xl border px-3 py-2 bg-transparent"
         />
       </div>
+
       <div className="mt-6 grid md:grid-cols-2 gap-5">
         {loading ? (
           <div>Loading…</div>
         ) : (
-          jobs.map((j) => <JobCard key={j.id} job={j} />)
-        )}{" "}
+          jobs.map((j) => (
+            <JobCard
+              key={j.id}
+              job={j}
+              initiallySaved={savedIds.has(String(j.id))}
+            />
+          ))
+        )}
         {!loading && jobs.length === 0 && (
           <div className="opacity-70">No results.</div>
         )}
