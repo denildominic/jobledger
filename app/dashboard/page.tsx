@@ -1,9 +1,7 @@
-// app/dashboard/page.tsx
 import { cookies } from "next/headers";
 import { verifyJwt } from "@/lib/auth";
+import { Store } from "@/lib/store";
 import Link from "next/link";
-
-export const dynamic = "force-dynamic"; // important: see cookie changes
 
 export default async function DashboardPage() {
   const token = (await cookies()).get("token")?.value;
@@ -22,30 +20,30 @@ export default async function DashboardPage() {
     );
   }
 
-  let user: any = null;
+  let name = "there";
+  let savedIds = new Set<string>();
   try {
     const payload: any = await verifyJwt(token);
-    user = payload?.user ?? null;
+    name = payload?.user?.name ?? name;
+    savedIds = new Set(
+      (payload?.user?.savedJobIds ?? []).map((x: any) => String(x))
+    );
   } catch {}
 
-  const savedJobs = (user?.savedJobs ?? []) as Array<{
-    id: string;
-    title: string;
-    company: string;
-    location: string;
-  }>;
+  // Filter the available jobs by saved ids
+  const jobs = Store.getJobs().filter(
+    (j) => j.id && savedIds.has(String(j.id))
+  );
 
   return (
     <section className="container py-10">
-      <h1 className="text-3xl font-bold">
-        Welcome{user?.name ? `, ${user.name}` : ""}
-      </h1>
+      <h1 className="text-3xl font-bold">Welcome{name ? `, ${name}` : ""}</h1>
       <p className="opacity-80 mt-2">
         Your saved jobs and applications appear here.
       </p>
 
       <div className="mt-6 grid md:grid-cols-2 gap-5">
-        {savedJobs.map((j) => (
+        {jobs.map((j) => (
           <div
             key={j.id}
             className="rounded-2xl border p-5 border-slate-200 dark:border-slate-800"
@@ -67,7 +65,7 @@ export default async function DashboardPage() {
             </div>
           </div>
         ))}
-        {savedJobs.length === 0 && (
+        {jobs.length === 0 && (
           <div className="opacity-70">No saved jobs yet.</div>
         )}
       </div>
