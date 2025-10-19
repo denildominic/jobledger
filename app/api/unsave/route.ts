@@ -1,32 +1,50 @@
-// app/api/unsave/route.ts
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJwt, signJwt } from "@/lib/auth";
 import { Store } from "@/lib/store";
 
 export async function POST(req: Request) {
-  const { jobId } = await req.json();
-  if (!jobId) return NextResponse.json({ error: "jobId required" }, { status: 400 });
+  try {
+    const { jobId } = await req.json();
+    if (!jobId) {
+      return NextResponse.json({ error: "jobId required" }, { status: 400 });
+    }
 
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
-  if (!token) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    const token = (await cookies()).get("token")?.value;
+    if (!token) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
 
-  const payload: any = await verifyJwt(token);
-  const user = payload.user || {};
+    let payload: any;
+    try {
+      payload = await verifyJwt(token);
+    } catch {
+      return NextResponse.json({ error: "Invalid/expired session" }, { status: 401 });
+    }
 
-  const savedIds = new Set<string>(user.savedJobIds ?? []);
-  savedIds.delete(String(jobId));
+    const user = payload?.user ?? {};
+    const saved = new Set<string>(user.savedJobIds ?? []);
+    saved.delete(String(jobId));
 
-  const savedJobs = (user.savedJobs ?? []).filter((j: any) => String(j.id) !== String(jobId));
+    try { Store.removeSavedJob(user.id, String(jobId)); } catch {}
 
-  if (!process.env.VERCEL) {
-    Store.removeSavedJob?.(user.id, String(jobId));
+    const newToken = await signJwt({ user: { ...user, savedJobIds: [...saved] } });
+
+    const res = NextResponse.json({ ok: true, savedJobIds: [...saved] });
+    res.cookies.set({
+      name: "token",
+      value: newToken,
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 30,
+    });
+    return res;
+  } catch (e: any) {
+    return NextResponse.json({ error: e?.message ?? "Unsave failed" }, { status: 500 });
   }
-
-  const newToken = await signJwt({ user: { ...user, savedJobIds: [...savedIds], savedJobs } });
-
-  const res = NextResponse.json({ ok: true });
-  res.cookies.set({ name: "token", value: newToken, httpOnly: true, secure: true, sameSite: "lax", path: "/", maxAge: 60*60*24*30 });
-  return res;
 }
