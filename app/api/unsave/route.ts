@@ -1,50 +1,57 @@
-export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { verifyJwt, signJwt } from "@/lib/auth";
-import { Store } from "@/lib/store";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
+function readSavedIdsFromJar(jar: Awaited<ReturnType<typeof cookies>>): string[] {
+  const raw = jar.get("savedJobIds")?.value;
+  if (!raw) return [];
+  try {
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? arr.map((x: any) => String(x)) : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeSavedIdsToJar(
+  jar: Awaited<ReturnType<typeof cookies>>,
+  ids: string[]
+) {
+  jar.set("savedJobIds", JSON.stringify(ids), {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+  });
+}
 
 export async function POST(req: Request) {
   try {
-    const { jobId } = await req.json();
+    const jar = await cookies();
+
+    // authorize via NextAuth OR legacy demo token
+    const session: any = await getServerSession(authOptions as any);
+    const hasNextAuth = Boolean(session?.user?.email);
+    const hasLegacyToken = Boolean(jar.get("token")?.value);
+
+    if (!hasNextAuth && !hasLegacyToken) {
+      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { jobId } = await req.json().catch(() => ({}));
     if (!jobId) {
-      return NextResponse.json({ error: "jobId required" }, { status: 400 });
+      return NextResponse.json({ ok: false, error: "Missing jobId" }, { status: 400 });
     }
 
-    const token = (await cookies()).get("token")?.value;
-    if (!token) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-    }
+    const next = readSavedIdsFromJar(jar).filter((x) => String(x) !== String(jobId));
+    writeSavedIdsToJar(jar, next);
 
-    let payload: any;
-    try {
-      payload = await verifyJwt(token);
-    } catch {
-      return NextResponse.json({ error: "Invalid/expired session" }, { status: 401 });
-    }
-
-    const user = payload?.user ?? {};
-    const saved = new Set<string>(user.savedJobIds ?? []);
-    saved.delete(String(jobId));
-
-    try { Store.removeSavedJob(user.id, String(jobId)); } catch {}
-
-    const newToken = await signJwt({ user: { ...user, savedJobIds: [...saved] } });
-
-    const res = NextResponse.json({ ok: true, savedJobIds: [...saved] });
-    res.cookies.set({
-      name: "token",
-      value: newToken,
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 30,
-    });
-    return res;
+    return NextResponse.json({ ok: true, savedJobIds: next });
   } catch (e: any) {
-    return NextResponse.json({ error: e?.message ?? "Unsave failed" }, { status: 500 });
+    return NextResponse.json({ ok: false, error: e?.message || "Internal error" }, { status: 500 });
   }
 }
