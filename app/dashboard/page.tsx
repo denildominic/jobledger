@@ -2,13 +2,19 @@ import { cookies } from "next/headers";
 import { verifyJwt } from "@/lib/auth";
 import { Store } from "@/lib/store";
 import Link from "next/link";
+import LogoutButton from "@/components/LogoutButton";
 
 export default async function DashboardPage() {
   const token = (await cookies()).get("token")?.value;
   if (!token) {
     return (
       <section className="container py-10">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <div className="flex items-center justify-between gap-4">
+          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <Link href="/login" className="btn">
+            Log in
+          </Link>
+        </div>
         <p className="mt-2 opacity-80">
           Please{" "}
           <Link href="/login" className="underline">
@@ -30,14 +36,18 @@ export default async function DashboardPage() {
     );
   } catch {}
 
-  // Filter the available jobs by saved ids
   const jobs = Store.getJobs().filter(
     (j) => j.id && savedIds.has(String(j.id))
   );
 
   return (
     <section className="container py-10">
-      <h1 className="text-3xl font-bold">Welcome{name ? `, ${name}` : ""}</h1>
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="text-3xl font-bold">Welcome{name ? `, ${name}` : ""}</h1>
+        {/* NEW: safe logout */}
+        <LogoutButton className="btn-outline" redirectTo="/" />
+      </div>
+
       <p className="opacity-80 mt-2">
         Your saved jobs and applications appear here.
       </p>
