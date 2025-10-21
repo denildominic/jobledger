@@ -1,28 +1,40 @@
-// lib/store.ts
 import fs from "fs";
 import path from "path";
 
-const IS_VERCEL = !!process.env.VERCEL;
-const dataDir = path.join(process.cwd(), "data");
-if (!IS_VERCEL) {
-  try { fs.mkdirSync(dataDir, { recursive: true }); } catch {}
+// ✅ On Vercel the repo dir is read-only. /tmp is writable.
+// Locally, still use ./data so it persists for you.
+const baseDir = process.env.VERCEL ? "/tmp" : process.cwd();
+const dataDir = path.join(baseDir, "data");
+const usersFile = path.join(dataDir, "users.json");
+const jobsFile  = path.join(dataDir, "jobs.json");
+
+function ensureDir() {
+  try {
+    if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+  } catch {}
 }
 
-function readJSON<T>(file: string, def: T): T {
-  const p = path.join(dataDir, file);
-  if (!fs.existsSync(p)) return def;
-  try { return JSON.parse(fs.readFileSync(p, "utf8")) as T; } catch { return def; }
+function readJSON<T>(filePath: string, fallback: T): T {
+  try {
+    if (!fs.existsSync(filePath)) return fallback;
+    const raw = fs.readFileSync(filePath, "utf8");
+    return JSON.parse(raw) as T;
+  } catch {
+    return fallback;
+  }
 }
-function writeJSON<T>(file: string, v: T) {
-  if (IS_VERCEL) return;
-  const p = path.join(dataDir, file);
-  fs.writeFileSync(p, JSON.stringify(v, null, 2), "utf8");
+function writeJSON<T>(filePath: string, value: T) {
+  ensureDir();
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(value, null, 2), "utf8");
+  } catch {
+    // swallow; API will reflect failure through unchanged reads
+  }
 }
 
 export type User = {
   id: string;
   email: string;
-  password?: string;
   name: string;
   savedJobIds: string[];
 };
@@ -37,60 +49,65 @@ export type Job = {
   description: string;
   salary: string;
   postedAt: string;
+  applyUrl?: string;
 };
 
+function uuid() {
+  return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+}
+
 export const Store = {
-  // USERS
-  getUsers(): User[] { return readJSON<User[]>("users.json", []); },
-  saveUsers(users: User[]) { writeJSON("users.json", users); },
-
+  // Users
+  getUsers(): User[] {
+    return readJSON<User[]>(usersFile, []);
+  },
+  saveUsers(users: User[]) {
+    writeJSON(usersFile, users);
+  },
   getUserByEmail(email: string): User | undefined {
-    return this.getUsers().find(u => u.email === email);
+    if (!email) return undefined;
+    return this.getUsers().find(u => u.email.toLowerCase() === email.toLowerCase());
   },
-
+  getUserById(id: string): User | undefined {
+    return this.getUsers().find(u => u.id === id);
+  },
   findOrCreateUser(data: { name: string; email: string }): User {
-    if (!IS_VERCEL) {
-      const users = this.getUsers();
-      let u = users.find(x => x.email === data.email);
-      if (!u) {
-        u = {
-          id: (globalThis.crypto as any)?.randomUUID?.() ?? Math.random().toString(36).slice(2),
-          name: data.name,
-          email: data.email,
-          savedJobIds: [],
-        };
-        users.push(u);
-        this.saveUsers(users);
-      }
-      return u;
+    const users = this.getUsers();
+    let u = users.find(x => x.email.toLowerCase() === data.email.toLowerCase());
+    if (!u) {
+      u = { id: uuid(), email: data.email, name: data.name || "User", savedJobIds: [] };
+      users.push(u);
+      this.saveUsers(users);
+    } else if (data.name && data.name !== u.name) {
+      u.name = data.name;
+      this.saveUsers(users);
     }
-    // stateless fabrication for serverless
-    return {
-      id: `vercel-${Buffer.from(data.email).toString("hex").slice(0, 12)}`,
-      name: data.name,
-      email: data.email,
-      savedJobIds: [],
-    };
+    return u;
   },
-
   addSavedJob(userId: string, jobId: string) {
-    if (IS_VERCEL) return; // no-op in prod
     const users = this.getUsers();
     const u = users.find(x => x.id === userId);
     if (!u) return;
-    u.savedJobIds = Array.from(new Set([...(u.savedJobIds ?? []), String(jobId)]));
-    this.saveUsers(users);
+    const id = String(jobId);
+    if (!u.savedJobIds.includes(id)) {
+      u.savedJobIds.push(id);
+      this.saveUsers(users);
+    }
   },
-
   removeSavedJob(userId: string, jobId: string) {
-    if (IS_VERCEL) return; // no-op in prod
     const users = this.getUsers();
     const u = users.find(x => x.id === userId);
     if (!u) return;
-    u.savedJobIds = (u.savedJobIds ?? []).filter(id => id !== String(jobId));
-    this.saveUsers(users);
+    const id = String(jobId);
+    const next = u.savedJobIds.filter(x => String(x) !== id);
+    if (next.length !== u.savedJobIds.length) {
+      u.savedJobIds = next;
+      this.saveUsers(users);
+    }
   },
 
-  // JOBS
-  getJobs(): Job[] { return readJSON<Job[]>("jobs.json", []); },
+  // Local jobs
+  getJobs(): Job[] {
+    return readJSON<Job[]>(jobsFile, []);
+  },
 };
