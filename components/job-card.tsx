@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Job } from "@/lib/store";
 import SaveJobButton from "./SaveJobButton";
+import ApplyButton from "./ApplyButton";
 
 export function JobCard({
   job,
@@ -36,13 +37,17 @@ export function JobCard({
 
       <p className="mt-3 line-clamp-2 opacity-80">{job.description}</p>
 
-      <div className="mt-4 flex gap-2">
+      <div className="mt-4 flex flex-wrap gap-2">
         <Link href={`/jobs/${job.id}`} className="btn">
           View
         </Link>
         <Link href={`/resume-match?jobId=${job.id}`} className="btn-outline">
           Match my resume
         </Link>
+
+        {/* Apply before Save (hidden if no applyUrl) */}
+        <ApplyButton href={job.applyUrl} />
+
         <SaveJobButton jobId={String(job.id)} initiallySaved={initiallySaved} />
       </div>
     </div>
