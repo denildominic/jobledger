@@ -3,6 +3,30 @@ import { useEffect, useState } from "react";
 import { JobCard } from "@/components/job-card";
 import type { Job } from "@/lib/store";
 
+function normalizeJob(r: any): Job {
+  return {
+    id: String(r.id ?? r.jobId ?? crypto.randomUUID()),
+    title: r.title ?? "",
+    company: r.company ?? "Unknown",
+    location: r.location ?? "—",
+    type:
+      r.type ??
+      (r.contract_type
+        ? String(r.contract_type).replace(/_/g, " ")
+        : "Full-time"),
+    tags: Array.isArray(r.tags)
+      ? r.tags
+      : r.category?.label
+      ? [r.category.label]
+      : [],
+    description: r.description ?? r.summary ?? "",
+    salary: r.salary ?? "",
+    postedAt: r.postedAt ?? r.posted ?? "",
+    // 👇 ensure ApplyButton gets a URL
+    applyUrl: r.applyUrl ?? r.redirect_url ?? r.url ?? undefined,
+  };
+}
+
 export default function JobsPage() {
   const [q, setQ] = useState("");
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -11,13 +35,15 @@ export default function JobsPage() {
 
   async function load(query: string) {
     setLoading(true);
-    const res = await fetch(`/api/jobs/search?q=${encodeURIComponent(query)}`);
-    const data: Job[] = await res.json();
-    setJobs(data);
+    const res = await fetch(`/api/jobs/search?q=${encodeURIComponent(query)}`, {
+      cache: "no-store",
+    });
+    const data = await res.json();
+    const normalized: Job[] = Array.isArray(data) ? data.map(normalizeJob) : [];
+    setJobs(normalized);
     setLoading(false);
   }
 
-  // initial load + fetch saved ids from your JWT (fresh, not cached)
   useEffect(() => {
     load("");
     (async () => {
@@ -29,7 +55,6 @@ export default function JobsPage() {
     })();
   }, []);
 
-  // debounce search
   useEffect(() => {
     const id = setTimeout(() => load(q), 400);
     return () => clearTimeout(id);
