@@ -5,7 +5,7 @@ import { Footer } from "@/components/footer";
 import { AppThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
-  title: "Job Finder",
+  title: "JobLedger",
   description: "Find your next role. Upload your resume and assess your fit.",
 };
 
