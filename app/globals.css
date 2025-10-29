@@ -2,36 +2,108 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ----- Base tokens (can stay outside layers) ----- */
 :root {
   --bg: 255 255 255;
   --fg: 15 23 42;
 }
-
 .dark {
   --bg: 2 6 23;
   --fg: 226 232 240;
 }
-
 html,
 body {
   height: 100%;
 }
-
 body {
   background: rgb(var(--bg));
   color: rgb(var(--fg));
 }
 
-.container {
-  @apply mx-auto max-w-6xl px-4;
+/* ----- All custom classes that use @apply must be inside @layer components ----- */
+@layer components {
+  .container {
+    @apply mx-auto max-w-6xl px-4;
+  }
+
+  /* Base button FIRST */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-2xl px-4 py-2
+           font-medium shadow-sm transition
+           bg-brand text-white hover:bg-brand-700;
+  }
+
+  /* Variants can @apply .btn now */
+  .btn-outline {
+    @apply inline-flex items-center justify-center rounded-2xl px-4 py-2 font-medium
+           transition border border-slate-300 dark:border-slate-700
+           hover:bg-slate-100 dark:hover:bg-slate-900;
+  }
+
+  /* Optional variants used by the new components */
+  .btn-primary {
+    @apply btn;
+  } /* alias */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-2xl px-4 py-2 font-medium
+           bg-slate-100/60 dark:bg-slate-900/60
+           border border-slate-200 dark:border-slate-800
+           hover:bg-slate-200/70 dark:hover:bg-slate-800;
+  }
+  .btn-muted {
+    @apply inline-flex items-center justify-center rounded-2xl px-3 py-2 text-sm
+           bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800;
+  }
+
+  /* Cards / badges / inputs used across pages */
+  .card {
+    @apply rounded-2xl border shadow-sm transition
+           border-slate-200/60 dark:border-slate-700/60
+           bg-white/70 dark:bg-slate-900/60
+           backdrop-blur supports-[backdrop-filter]:bg-white/50;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full border text-xs
+           px-2.5 py-1
+           border-slate-300/70 dark:border-slate-700/70
+           bg-slate-50/60 dark:bg-slate-800/60;
+  }
+  .chip {
+    @apply inline-flex items-center rounded-full text-[11px] px-2 py-0.5 bg-brand/10 text-brand-700 dark:text-brand-200;
+  }
+
+  .input,
+  .select,
+  .textarea {
+    @apply w-full rounded-xl bg-white/70 dark:bg-slate-900/70
+           border border-slate-300/70 dark:border-slate-700/70
+           px-3 py-2 outline-none transition;
+  }
+  .input:focus,
+  .select:focus,
+  .textarea:focus {
+    @apply ring-2 ring-brand/30 border-brand/50;
+  }
+
+  .tab {
+    @apply px-3 py-2 rounded-xl text-sm hover:bg-slate-100/70 dark:hover:bg-slate-800/70 transition;
+  }
+  .tab-active {
+    @apply bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700;
+  }
+
+  .icon-btn {
+    @apply inline-grid place-items-center rounded-xl size-9 border
+           border-slate-200 dark:border-slate-800
+           bg-white/70 dark:bg-slate-900/70
+           hover:bg-slate-100 dark:hover:bg-slate-800 transition;
+  }
 }
 
-.btn {
-  @apply inline-flex items-center justify-center rounded-2xl px-4 py-2 font-medium shadow-sm transition;
-  @apply bg-brand text-white hover:bg-brand-700;
-}
-
-.btn-outline {
-  @apply inline-flex items-center justify-center rounded-2xl px-4 py-2 font-medium transition border;
-  @apply border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-900;
+/* Utilities that don’t use @apply can live anywhere */
+.gradient-text {
+  background: linear-gradient(90deg, #b7ccff 0%, #5b9cff 40%, #2f66d4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
