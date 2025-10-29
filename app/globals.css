@@ -102,8 +102,12 @@ body {
 
 /* Utilities that don’t use @apply can live anywhere */
 .gradient-text {
-  background: linear-gradient(90deg, #b7ccff 0%, #5b9cff 40%, #2f66d4 100%);
+  background: linear-gradient(90deg, #a7f3d0 0%, #10b981 45%, #34d399 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+/* .btn-primary.shadow-glow can use: */
+:root {
+  --glow: 0 0 40px rgba(16, 185, 129, 0.35);
 }
