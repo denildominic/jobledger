@@ -4,7 +4,7 @@ A modern, full‑stack web app that helps people discover roles they love, insta
 
 Built with Next.js (App Router), TypeScript, Tailwind CSS v4, Prisma, and your choice of job + AI providers.
 
-✨ Features
+ Features
 
 Secure Auth – OAuth (Google/GitHub) or email magic link via NextAuth.
 
@@ -20,7 +20,7 @@ Dark/Light Mode – System‑aware theme with smooth toggles.
 
 Responsive UI – Accessible, keyboard‑friendly, mobile‑first.
 
-🧱 Tech Stack
+ Tech Stack
 
 Frontend: Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS v4, shadcn/ui, lucide-react
 
