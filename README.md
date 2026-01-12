@@ -1,14 +1,14 @@
 JobLedger
 
-A modern, full‑stack web app that helps people discover roles they love, instantly scan postings against their resume, and apply with confidence. It includes authentication, a beautiful dashboard, dark/light themes, a fast job search with filters, and an AI‑powered Resume Match that scores fit against any job title or description.
+A modern, full‑stack web app that helps people of any experience levels discover roles, instantly scan postings against their resume, and apply with confidence. It includes authentication, a beautiful dashboard, dark/light themes, a fast job search with filters, and an AI‑powered Resume Match(under construction) that scores fit against any job title or description.
 
 Built with Next.js (App Router), TypeScript, Tailwind CSS v4, Prisma, and your choice of job + AI providers.
 
  Features
 
-Secure Auth – OAuth (Google/GitHub) or email magic link via NextAuth.
+Secure Auth – OAuth (Google) or email magic link via NextAuth.
 
-Job Search – Query by keyword/location; filter by salary, remote/on‑site, experience.
+Job Search – Query by keyword/location, filter by salary, remote/on‑site, experience.
 
 Apply Flow – Open application links, save jobs, track statuses (Saved → Applied → Interview → Offer → Rejected).
 
