@@ -1,7 +1,7 @@
 // lib/adzu.ts
-import type { Job } from "@/lib/store"; // ← use the same Job type everywhere
+import type { Job } from "@/lib/store";
 
-// Minimal Adzuna fields we use
+
 type AdzunaJob = {
   id: string | number;
   title: string;
@@ -10,10 +10,10 @@ type AdzunaJob = {
   category?: { label?: string };
   salary_min?: number;
   salary_max?: number;
-  created?: string;              // ISO date-time
+  created?: string;              // ISO date-time created
   description?: string;
   contract_type?: string;        // e.g., "full_time"
-  redirect_url?: string;         // ← external application URL
+  redirect_url?: string;         //  external application URL
 };
 
 const APP_ID = process.env.ADZUNA_APP_ID;
@@ -43,7 +43,7 @@ const map = (j: AdzunaJob): Job => ({
       ? `${usd0.format(j.salary_min)}+`
       : "",
   postedAt: j.created ?? "",
-  applyUrl: j.redirect_url ?? "",                   // ← important
+  applyUrl: j.redirect_url ?? "",         
 });
 
 export async function adzunaSearch(query: string): Promise<Job[] | null> {
