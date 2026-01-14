@@ -9,7 +9,7 @@ type MatchResult = {
 };
 
 export default function ResumeMatchForm({
-  initialJobTitle = "Full-Stack Engineer",
+  initialJobTitle = "",
 }: Props) {
   const [jobTitle, setJobTitle] = useState(initialJobTitle);
   const [text, setText] = useState("");

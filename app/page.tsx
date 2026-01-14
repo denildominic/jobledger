@@ -26,7 +26,7 @@ export default function Home() {
           {/* Subhead */}
           <p className="mt-4 text-lg opacity-80 max-w-2xl mx-auto">
             Search roles, analyze your resume against job descriptions, and
-            track applications — all in one place.
+            track applications, all in one place.
           </p>
 
           {/* CTAs */}
@@ -67,7 +67,7 @@ export default function Home() {
           {/* Mini teaser / metrics row (optional, looks premium) */}
           <div className="mt-12 grid gap-3 sm:grid-cols-3">
             {[
-              { k: "10k+", v: "tracked applications" },
+              { k: "1k+", v: "tracked applications" },
               { k: "92%", v: "offer-reach users" },
               { k: "A+", v: "accessibility score" },
             ].map((m, i) => (

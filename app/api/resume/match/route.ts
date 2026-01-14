@@ -7,7 +7,7 @@ import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
 
-// ✅ Robust loader that works with CJS/ESM shapes under Turbopack
+// Robust loader that works with CJS/ESM shapes under Turbopack
 function getPdfParse(): ((buf: Buffer) => Promise<{ text: string }>) | null {
   try {
     const mod = require("pdf-parse");
@@ -60,7 +60,7 @@ export async function POST(req: Request) {
           );
         }
         try {
-          const parsed = await pdfParse(buf);   // ⬅️ now guaranteed to be a function
+          const parsed = await pdfParse(buf);   // now guaranteed to be a function
           if (parsed?.text) resumeText += "\n" + parsed.text;
         } catch (e: any) {
           return NextResponse.json(

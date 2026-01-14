@@ -108,7 +108,7 @@ export default async function DashboardPage() {
       </div>
 
       <p className="opacity-80 mt-2">
-        Your saved jobs and applications appear here.
+        Your saved jobs and applications are listed below.
       </p>
 
       <div className="mt-6 grid md:grid-cols-2 gap-5">
