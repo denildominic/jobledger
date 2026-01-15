@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-// ✅ On Vercel the repo dir is read-only. /tmp is writable.
+// On Vercel the repo dir is read-only. /tmp is writable.
 // Locally, still use ./data so it persists for you.
 const baseDir = process.env.VERCEL ? "/tmp" : process.cwd();
 const dataDir = path.join(baseDir, "data");
