@@ -15,7 +15,7 @@ export default function Home() {
           {/* Badge */}
           <div className="badge mx-auto">
             <span className="h-2 w-2 rounded-full bg-brand inline-block" />
-            <span>AI-assisted matching • private &amp; local</span>
+            <span>AI-assisted matching job portal</span>
           </div>
 
           {/* Headline */}
