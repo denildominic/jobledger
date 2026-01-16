@@ -75,7 +75,7 @@ export async function POST(req: Request) {
 
     if (!jobTitle.trim() || !resumeText.trim()) {
       return NextResponse.json(
-        { error: "Provide a target job title and resume text or file." },
+        { error: "Provide a target job title and attach the resume." },
         { status: 400 }
       );
     }

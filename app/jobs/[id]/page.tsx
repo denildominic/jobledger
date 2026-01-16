@@ -44,7 +44,7 @@ export default async function JobPage(props: {
           className="btn"
           href={`/resume-match?jobId=${encodeURIComponent(id)}`}
         >
-          Match my resume to this job
+          Match my resume
         </Link>
       </div>
     </main>

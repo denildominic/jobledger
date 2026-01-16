@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     const hasLegacyToken = Boolean(jar.get("token")?.value);
 
     if (!hasNextAuth && !hasLegacyToken) {
-      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ ok: false, error: "Unauthorized. Please log in." }, { status: 401 });
     }
 
     const { jobId } = await req.json().catch(() => ({}));
