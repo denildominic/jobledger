@@ -32,8 +32,8 @@ const map = (j: AdzunaJob): Job => ({
   company: j.company?.display_name ?? "Unknown",
   location: j.location?.display_name ?? "—",
   type: j.contract_type
-    ? j.contract_type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
-    : "Full-time",
+    ? j.contract_type.replace(/_/g, "  ").replace(/\b\w/g, (c) => c.toUpperCase())
+    : " (Full-time)",
   tags: j.category?.label ? [j.category.label] : [],
   description: j.description ?? "",
   salary:
