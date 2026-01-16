@@ -20,19 +20,19 @@ export default function Home() {
 
           {/* Headline */}
           <h1 className="mt-6 text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.08]">
-            Find work you <span className="gradient-text">actually want</span>
+            <span className="gradient-text">Make every application count</span>
           </h1>
 
           {/* Subhead */}
           <p className="mt-4 text-lg opacity-80 max-w-2xl mx-auto">
-            Search roles, analyze your resume against job descriptions, and
-            track applications, all in one place.
+            Match. Improve. Apply.
+
           </p>
 
           {/* CTAs */}
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link href="/jobs" className="btn-primary shadow-glow">
-              Browse Jobs
+              TRY FOR FREE
             </Link>
             <Link href="/resume-match" className="btn-ghost">
               Resume Match
