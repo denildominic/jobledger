@@ -9,7 +9,7 @@ import EmptyState from "@/components/empty-state";
 
 type ApiJob = any;
 
-// ---------- helpers to infer normalized signals ----------
+// helpers to infer normalized signals
 const REMOTE_WORDS = [
   "remote",
   "wfh",
@@ -71,7 +71,7 @@ function inferMode(
   if (isHybrid) return "hybrid";
   if (isRemote && !isOnsite) return "remote";
   if (isOnsite && !isRemote) return "onsite";
-  // Heuristic: if location looks like a city/state and no explicit remote, call it onsite
+  // If location looks like a city/state and no explicit remote, call it onsite
   if (j.location && !isRemote) return "onsite";
   return null;
 }
@@ -96,7 +96,7 @@ function inferLevel(
   return null;
 }
 
-// ---------- normalize from API to internal ----------
+//  normalize from API to internal 
 function normalizeJob(r: ApiJob): Job & { __mode?: Mode; __level?: Level } {
   const j: Job = {
     id: String(r.id ?? r.jobId ?? crypto.randomUUID()),
@@ -125,7 +125,7 @@ function normalizeJob(r: ApiJob): Job & { __mode?: Mode; __level?: Level } {
   return j as Job & { __mode?: Mode; __level?: Level };
 }
 
-// ---------- page component ----------
+// page component
 type SortKey = "relevant" | "newest" | "salary_high" | "salary_low";
 
 export default function JobsPage() {
