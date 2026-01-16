@@ -33,7 +33,7 @@ export async function POST(req: Request) {
   try {
     const session: any = await getServerSession(authOptions as any);
     if (!session?.user?.email) {
-      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ ok: false, error: "Unauthorized. Please log in." }, { status: 401 });
     }
 
     const { jobId } = await req.json().catch(() => ({}));
