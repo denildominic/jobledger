@@ -179,6 +179,20 @@ body {
     --tw-ring-color: rgba(16, 185, 129, 0.25);
   }
 
+  /* ✅ IMPORTANT: make native dropdown UI match theme */
+  .select {
+    color-scheme: light;
+  }
+  .dark .select {
+    color-scheme: dark;
+  }
+
+  /* Some browsers honor option styling; harmless if ignored */
+  .select option {
+    background: rgb(var(--card));
+    color: rgb(var(--fg));
+  }
+
   .icon-btn {
     @apply inline-grid place-items-center rounded-lg size-9 border transition;
     border-color: rgb(var(--border));

@@ -14,7 +14,7 @@ export default function LogoutPage() {
 
   return (
     <main className="container py-10">
-      <p>Signing you out…</p>
+      <p>Signing you out.</p>
     </main>
   );
 }
