@@ -2,112 +2,216 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ----- Base tokens (can stay outside layers) ----- */
+/* =========================
+   Theme tokens (light/dark)
+   ========================= */
 :root {
   --bg: 255 255 255;
   --fg: 15 23 42;
+
+  --panel: 248 250 252; /* toolbar background */
+  --card: 255 255 255; /* card surface */
+  --border: 226 232 240;
+
+  --muted: 71 85 105; /* slate-600 */
+  --muted2: 100 116 139; /* slate-500 */
+
+  --shadow-sm: 0 1px 0 rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 12px 32px rgba(2, 6, 23, 0.08);
+
+  --glow: 0 0 40px rgba(16, 185, 129, 0.22);
 }
+
 .dark {
   --bg: 2 6 23;
   --fg: 226 232 240;
+
+  --panel: 6 10 24;
+  --card: 8 12 28;
+  --border: 30 41 59;
+
+  --muted: 148 163 184; /* slate-400 */
+  --muted2: 100 116 139; /* slate-500 */
+
+  --shadow-sm: 0 1px 0 rgba(255, 255, 255, 0.03);
+  --shadow-md: 0 20px 60px rgba(0, 0, 0, 0.55);
 }
+
 html,
 body {
   height: 100%;
 }
+
 body {
   background: rgb(var(--bg));
   color: rgb(var(--fg));
 }
 
-/* ----- All custom classes that use @apply must be inside @layer components ----- */
+/* =========================
+   Components (Tailwind @apply)
+   ========================= */
 @layer components {
   .container {
     @apply mx-auto max-w-6xl px-4;
   }
 
-  /* Base button FIRST */
+  /* Header blur */
+  .header-blur {
+    @apply sticky top-0 z-40 border-b backdrop-blur;
+    border-color: rgb(var(--border));
+    background: rgba(var(--bg), 0.85);
+  }
+
+  /* Tabs (used in Navbar) */
+  .tab {
+    @apply px-3 py-2 rounded-lg text-sm font-medium transition;
+    color: rgb(var(--fg));
+  }
+  .tab:hover {
+    background: rgba(var(--fg), 0.05);
+  }
+  .tab-active {
+    @apply border;
+    border-color: rgb(var(--border));
+    background: rgba(var(--fg), 0.06);
+  }
+
+  /* Buttons */
   .btn {
-    @apply inline-flex items-center justify-center rounded-2xl px-4 py-2
-           font-medium shadow-sm transition
-           bg-brand text-white hover:bg-brand-700;
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold
+           transition shadow-sm;
+    background: rgb(16 185 129);
+    color: white;
+  }
+  .btn:hover {
+    background: rgb(4 120 87);
   }
 
-  /* Variants can @apply .btn now */
   .btn-outline {
-    @apply inline-flex items-center justify-center rounded-2xl px-4 py-2 font-medium
-           transition border border-slate-300 dark:border-slate-700
-           hover:bg-slate-100 dark:hover:bg-slate-900;
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold
+           transition border;
+    border-color: rgb(var(--border));
+    background: transparent;
+    color: rgb(var(--fg));
+  }
+  .btn-outline:hover {
+    background: rgba(var(--fg), 0.05);
   }
 
-  /* Optional variants used by the new components */
-  .btn-primary {
-    @apply btn;
-  } /* alias */
   .btn-ghost {
-    @apply inline-flex items-center justify-center rounded-2xl px-4 py-2 font-medium
-           bg-slate-100/60 dark:bg-slate-900/60
-           border border-slate-200 dark:border-slate-800
-           hover:bg-slate-200/70 dark:hover:bg-slate-800;
+    @apply inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium
+           transition border;
+    border-color: rgb(var(--border));
+    background: transparent;
+    color: rgb(var(--fg));
   }
+  .btn-ghost:hover {
+    background: rgba(var(--fg), 0.05);
+  }
+
   .btn-muted {
-    @apply inline-flex items-center justify-center rounded-2xl px-3 py-2 text-sm
-           bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800;
+    @apply inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium transition;
+    background: rgba(var(--fg), 0.05);
+    color: rgb(var(--fg));
+  }
+  .btn-muted:hover {
+    background: rgba(var(--fg), 0.08);
   }
 
-  /* Cards / badges / inputs used across pages */
+  /* Surfaces */
+  .panel {
+    @apply rounded-xl border;
+    border-color: rgb(var(--border));
+    background: rgb(var(--panel));
+    box-shadow: var(--shadow-sm);
+  }
+
   .card {
-    @apply rounded-2xl border shadow-sm transition
-           border-slate-200/60 dark:border-slate-700/60
-           bg-white/70 dark:bg-slate-900/60
-           backdrop-blur supports-[backdrop-filter]:bg-white/50;
-  }
-  .badge {
-    @apply inline-flex items-center gap-1 rounded-full border text-xs
-           px-2.5 py-1
-           border-slate-300/70 dark:border-slate-700/70
-           bg-slate-50/60 dark:bg-slate-800/60;
-  }
-  .chip {
-    @apply inline-flex items-center rounded-full text-[11px] px-2 py-0.5 bg-brand/10 text-brand-700 dark:text-brand-200;
+    @apply rounded-xl border;
+    border-color: rgb(var(--border));
+    background: rgb(var(--card));
+    box-shadow: var(--shadow-sm);
   }
 
+  /* List card (jobs list) */
+  .list-card {
+    @apply relative rounded-xl border p-4 transition cursor-pointer;
+    border-color: rgb(var(--border));
+    background: rgb(var(--card));
+    box-shadow: none;
+  }
+  .list-card:hover {
+    background: rgba(var(--fg), 0.03);
+  }
+  .list-card-selected {
+    border-color: rgba(16, 185, 129, 0.55);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+  }
+
+  /* Meta row */
+  .meta {
+    @apply flex flex-wrap items-center gap-x-2 gap-y-1 text-xs;
+    color: rgb(var(--muted));
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center rounded-full px-2 py-1 text-[11px] border;
+    border-color: rgb(var(--border));
+    background: rgba(var(--fg), 0.04);
+    color: rgb(var(--muted));
+  }
+
+  /* Inputs */
   .input,
   .select,
   .textarea {
-    @apply w-full rounded-xl bg-white/70 dark:bg-slate-900/70
-           border border-slate-300/70 dark:border-slate-700/70
-           px-3 py-2 outline-none transition;
+    @apply w-full rounded-lg border px-3 py-2 text-sm outline-none transition;
+    border-color: rgb(var(--border));
+    background: rgba(var(--fg), 0.03);
+    color: rgb(var(--fg));
   }
   .input:focus,
   .select:focus,
   .textarea:focus {
-    @apply ring-2 ring-brand/30 border-brand/50;
-  }
-
-  .tab {
-    @apply px-3 py-2 rounded-xl text-sm hover:bg-slate-100/70 dark:hover:bg-slate-800/70 transition;
-  }
-  .tab-active {
-    @apply bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700;
+    @apply ring-2;
+    border-color: rgba(16, 185, 129, 0.45);
+    --tw-ring-color: rgba(16, 185, 129, 0.25);
   }
 
   .icon-btn {
-    @apply inline-grid place-items-center rounded-xl size-9 border
-           border-slate-200 dark:border-slate-800
-           bg-white/70 dark:bg-slate-900/70
-           hover:bg-slate-100 dark:hover:bg-slate-800 transition;
+    @apply inline-grid place-items-center rounded-lg size-9 border transition;
+    border-color: rgb(var(--border));
+    background: rgba(var(--fg), 0.03);
+  }
+  .icon-btn:hover {
+    background: rgba(var(--fg), 0.06);
   }
 }
 
-/* Utilities that don’t use @apply can live anywhere */
+/* =========================
+   Utilities (no @apply needed)
+   ========================= */
+.break-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2; /* fixes VS Code warning */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.shadow-glow {
+  box-shadow: var(--glow);
+}
+
 .gradient-text {
   background: linear-gradient(90deg, #a7f3d0 0%, #10b981 45%, #34d399 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-}
-/* .btn-primary.shadow-glow can use: */
-:root {
-  --glow: 0 0 40px rgba(16, 185, 129, 0.35);
 }
