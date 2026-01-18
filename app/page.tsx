@@ -4,84 +4,136 @@ import Navbar from "@/components/navbar";
 export default function Home() {
   return (
     <>
-      {/* Decorative background blobs (no interactivity, pure CSS) */}
+
+      {/* Background */}
       <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute -top-24 -left-24 size-[38rem] rounded-full blur-3xl opacity-20 bg-brand/40" />
-        <div className="absolute top-10 right-[-10rem] size-[30rem] rounded-full blur-3xl opacity-15 bg-indigo-500/40" />
+        <div
+          className="absolute -top-40 -left-40 h-[520px] w-[520px] rounded-full blur-3xl opacity-20"
+          style={{ background: "rgba(16,185,129,.35)" }}
+        />
+        <div
+          className="absolute top-10 right-[-140px] h-[460px] w-[460px] rounded-full blur-3xl opacity-15"
+          style={{ background: "rgba(59,130,246,.35)" }}
+        />
+        <div
+          className="absolute bottom-[-180px] left-[20%] h-[520px] w-[520px] rounded-full blur-3xl opacity-10"
+          style={{ background: "rgba(168,85,247,.35)" }}
+        />
       </div>
 
-      <section className="relative overflow-hidden">
-        <div className="container pt-16 pb-24 text-center">
-          {/* Badge */}
-          <div className="badge mx-auto">
-            <span className="h-2 w-2 rounded-full bg-brand inline-block" />
-            <span>AI-assisted matching job portal</span>
+      <main className="container py-10 sm:py-14">
+        {/* Hero */}
+        <section className="mx-auto max-w-3xl text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs"
+               style={{
+                 borderColor: "rgb(var(--border))",
+                 background: "rgba(var(--fg), .03)",
+                 color: "rgb(var(--muted))",
+               }}>
+            <span
+              className="inline-block h-2 w-2 rounded-full"
+              style={{ background: "rgb(16 185 129)" }}
+            />
+            AI-assisted matching • private &amp; local
           </div>
 
-          {/* Headline */}
-          <h1 className="mt-6 text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.08]">
+          <h1 className="mt-6 text-4xl sm:text-5xl font-extrabold tracking-tight">
             <span className="gradient-text">Make every application count</span>
           </h1>
 
-          {/* Subhead */}
-          <p className="mt-4 text-lg opacity-80 max-w-2xl mx-auto">
-            Match. Improve. Apply.
-
+          <p className="mt-3 text-sm sm:text-base" style={{ color: "rgb(var(--muted))" }}>
+            Search roles, compare fit, and keep your shortlist organized — in a clean,
+            distraction-free UI.
           </p>
 
-          {/* CTAs */}
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link href="/jobs" className="btn-primary shadow-glow">
-              TRY FOR FREE
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <Link href="/jobs" className="btn">
+              Browse jobs
             </Link>
             <Link href="/resume-match" className="btn-ghost">
-              Resume Match
+              Resume match
+            </Link>
+            <Link href="/dashboard" className="btn-outline">
+              Open dashboard
             </Link>
           </div>
+        </section>
 
-          {/* Feature cards */}
-          <div className="mt-16 grid gap-4 md:grid-cols-3">
-            {[
-              {
-                title: "Smart Matching",
-                desc: "Upload your resume to see how well it aligns with any job.",
-              },
-              {
-                title: "Pro UI",
-                desc: "A polished, accessible interface trusted by teams.",
-              },
-              {
-                title: "Dark & Light",
-                desc: "Automatic theme with a manual toggle.",
-              },
-            ].map((c, i) => (
-              <article key={i} className="card p-6 text-left">
-                <h3 className="text-lg font-semibold">{c.title}</h3>
-                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-                  {c.desc}
-                </p>
-              </article>
-            ))}
-          </div>
-
-          {/* Mini teaser / metrics row (optional, looks premium) */}
-          <div className="mt-12 grid gap-3 sm:grid-cols-3">
-            {[
-              { k: "1k+", v: "tracked applications" },
-              { k: "92%", v: "offer-reach users" },
-              { k: "A+", v: "accessibility score" },
-            ].map((m, i) => (
-              <div
-                key={i}
-                className="rounded-2xl border border-slate-200/60 dark:border-slate-800/60 px-4 py-3 text-sm"
-              >
-                <div className="font-bold text-xl">{m.k}</div>
-                <div className="opacity-70">{m.v}</div>
+        {/* Feature cards */}
+        <section className="mt-10 sm:mt-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="card p-5">
+              <div className="text-sm font-semibold">Smart matching</div>
+              <p className="mt-2 text-sm" style={{ color: "rgb(var(--muted))" }}>
+                Compare your resume against a job post and get a clear match score.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <span className="badge">Match score</span>
+                <span className="badge">Keyword coverage</span>
               </div>
-            ))}
+            </div>
+
+            <div className="card p-5">
+              <div className="text-sm font-semibold">Pro UI</div>
+              <p className="mt-2 text-sm" style={{ color: "rgb(var(--muted))" }}>
+                Real-world layout with master-detail browsing and fast filtering.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <span className="badge">Keyboard-friendly</span>
+                <span className="badge">Clean spacing</span>
+              </div>
+            </div>
+
+            <div className="card p-5">
+              <div className="text-sm font-semibold">Dark &amp; Light</div>
+              <p className="mt-2 text-sm" style={{ color: "rgb(var(--muted))" }}>
+                Theme tokens keep your design consistent in both modes.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <span className="badge">Tokenized UI</span>
+                <span className="badge">Consistent contrast</span>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* Stats row */}
+        <section className="mt-8 sm:mt-10">
+          <div className="panel p-5">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="rounded-xl border p-4"
+                   style={{ borderColor: "rgb(var(--border))", background: "rgba(var(--fg), .02)" }}>
+                <div className="text-2xl font-extrabold">1k+</div>
+                <div className="mt-1 text-xs" style={{ color: "rgb(var(--muted))" }}>
+                  tracked applications
+                </div>
+              </div>
+
+              <div className="rounded-xl border p-4"
+                   style={{ borderColor: "rgb(var(--border))", background: "rgba(var(--fg), .02)" }}>
+                <div className="text-2xl font-extrabold">92%</div>
+                <div className="mt-1 text-xs" style={{ color: "rgb(var(--muted))" }}>
+                  offer-reach users
+                </div>
+              </div>
+
+              <div className="rounded-xl border p-4"
+                   style={{ borderColor: "rgb(var(--border))", background: "rgba(var(--fg), .02)" }}>
+                <div className="text-2xl font-extrabold">A+</div>
+                <div className="mt-1 text-xs" style={{ color: "rgb(var(--muted))" }}>
+                  accessibility score
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="mt-14 border-t pt-6 text-center text-xs"
+                style={{ borderColor: "rgb(var(--border))", color: "rgb(var(--muted2))" }}>
+          © {new Date().getFullYear()} JobLedger. All rights reserved.
+        </footer>
+      </main>
     </>
   );
 }
