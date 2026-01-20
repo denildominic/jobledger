@@ -32,7 +32,7 @@ export function Navbar() {
           <span
             className={`${fredoka.className} text-2xl md:text-3xl font-black tracking-tight`}
           >
-            Job<span className="gradient-text">Ledger</span>
+            JobLedger<span className="gradient-text">.</span>
           </span>
         </Link>
 

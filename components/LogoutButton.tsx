@@ -16,10 +16,10 @@ export default function LogoutButton({
     if (busy) return;
     setBusy(true);
     try {
-      // 1) clear our custom JWT cookie
+      // clear our custom JWT cookie
       await fetch("/api/logout", { method: "POST" }).catch(() => {});
 
-      // 2) sign out NextAuth (clears next-auth session cookies)
+      // sign out NextAuth (clears next-auth session cookies)
       await signOut({ callbackUrl: redirectTo });
     } finally {
       setBusy(false);

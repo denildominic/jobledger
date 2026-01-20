@@ -43,7 +43,7 @@ export default function UnsaveJobButton({
       onClick={onClick}
       disabled={submitting || isPending}
       className={className}
-      aria-label="Unsave this job"
+      aria-label="Unsave job"
     >
       {submitting || isPending ? "Unsaving…" : children}
     </button>
