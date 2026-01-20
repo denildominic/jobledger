@@ -119,8 +119,8 @@ export default function JobToolbar({
           >
             <option value="relevant">Relevant</option>
             <option value="newest">Newest</option>
-            <option value="salary_high">Salary: High → Low</option>
-            <option value="salary_low">Salary: Low → High</option>
+            <option value="salary_high">Salary: High to Low</option>
+            <option value="salary_low">Salary: Low to High</option>
           </select>
           <span className="text-sm text-slate-500 dark:text-slate-400">
             {results} results
