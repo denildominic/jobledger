@@ -34,7 +34,7 @@ export default function Home() {
               className="inline-block h-2 w-2 rounded-full"
               style={{ background: "rgb(16 185 129)" }}
             />
-            AI-assisted matching • private &amp; local
+            Job Board for students &amp; new grads
           </div>
 
           <h1 className="mt-6 text-4xl sm:text-5xl font-extrabold tracking-tight">
@@ -42,8 +42,7 @@ export default function Home() {
           </h1>
 
           <p className="mt-3 text-sm sm:text-base" style={{ color: "rgb(var(--muted))" }}>
-            Search roles, compare fit, and keep your shortlist organized — in a clean,
-            distraction-free UI.
+            Search roles, and apply based on your preferences.
           </p>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
