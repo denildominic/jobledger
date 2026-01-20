@@ -47,13 +47,13 @@ export default function Home() {
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <Link href="/jobs" className="btn">
-              Browse jobs
+              Browse Jobs
             </Link>
             <Link href="/resume-match" className="btn-ghost">
-              Resume match
+              Resume Match
             </Link>
             <Link href="/dashboard" className="btn-outline">
-              Open dashboard
+              Open Dashboard
             </Link>
           </div>
         </section>
