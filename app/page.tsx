@@ -53,7 +53,7 @@ export default function Home() {
               Resume Match
             </Link>
             <Link href="/dashboard" className="btn-outline">
-              Open Dashboard
+              Dashboard
             </Link>
           </div>
         </section>
