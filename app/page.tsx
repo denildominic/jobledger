@@ -42,7 +42,7 @@ export default function Home() {
           </h1>
 
           <p className="mt-3 text-sm sm:text-base" style={{ color: "rgb(var(--muted))" }}>
-            Search roles, and apply based on your preferences.
+            Search thousands of jobs, track your applications, and optimize your resume
           </p>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
