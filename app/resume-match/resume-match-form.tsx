@@ -69,7 +69,7 @@ export default function ResumeMatchForm({
       abortRef.current?.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jobTitle, text, file]); // compute is stable enough here
+  }, [jobTitle, text, file]); 
 
   return (
     <form
