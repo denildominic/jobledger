@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 type Props = { initialJobTitle?: string };
 
 type MatchResult = {
-  score: number; // 0..1 (your UI multiplies by 100)
+  score: number; 
   overlap: string[];
 };
 
