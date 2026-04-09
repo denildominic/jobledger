@@ -45,7 +45,7 @@ export function tfidfScore(resume: string, job: string) {
   }
   const score = (n1 && n2) ? dot / (Math.sqrt(n1) * Math.sqrt(n2)) : 0;
 
-  // top overlapping keywords
+  
   const set1 = new Set(docTokens[0]);
   const set2 = new Set(docTokens[1]);
   const overlap = [...set1].filter(t => set2.has(t)).slice(0, 30);

@@ -25,7 +25,7 @@ const usd0 = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 });
 
-// Normalize Adzuna -> our Job
+
 const map = (j: AdzunaJob): Job => ({
   id: String(j.id),
   title: j.title ?? "",
@@ -66,7 +66,8 @@ export async function adzunaSearch(query: string): Promise<Job[] | null> {
 
 export async function adzunaGetById(id: string): Promise<Job | null> {
   if (!APP_ID || !APP_KEY) return null;
-  // Quick narrow: search by quoted id, then exact match
+
+  
   const list = await adzunaSearch(`"${id}"`);
   return list?.find((j) => String(j.id) === String(id)) ?? null;
 }
