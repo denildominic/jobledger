@@ -105,7 +105,7 @@ export default function JobToolbar({
               })
             }
           >
-            Entry
+            Entry Level
           </button>
         </div>
 
