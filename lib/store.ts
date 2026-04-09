@@ -29,7 +29,7 @@ function writeJSON<T>(filePath: string, value: T) {
   try {
     fs.writeFileSync(filePath, JSON.stringify(value, null, 2), "utf8");
   } catch {
-    // swallow; API will reflect failure through unchanged reads
+    
   }
 }
 

@@ -19,7 +19,7 @@ export default function LogoutButton({
       // clear our custom JWT cookie
       await fetch("/api/logout", { method: "POST" }).catch(() => {});
 
-      // sign out NextAuth (clears next-auth session cookies)
+      
       await signOut({ callbackUrl: redirectTo });
     } finally {
       setBusy(false);
