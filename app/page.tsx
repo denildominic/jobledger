@@ -34,7 +34,7 @@ export default function Home() {
               className="inline-block h-2 w-2 rounded-full"
               style={{ background: "rgb(16 185 129)" }}
             />
-            Job Board for students &amp; new grads
+            Job Board built for students &amp; new grads
           </div>
 
           <h1 className="mt-6 text-4xl sm:text-5xl font-extrabold tracking-tight">
@@ -68,7 +68,7 @@ export default function Home() {
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="badge">Match score</span>
-                <span className="badge">Keyword coverage</span>
+                
               </div>
             </div>
 
@@ -78,7 +78,7 @@ export default function Home() {
                 Real-world layout with master-detail browsing and fast filtering.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
-                <span className="badge">Keyboard-friendly</span>
+                
                 <span className="badge">Clean spacing</span>
               </div>
             </div>
@@ -89,7 +89,7 @@ export default function Home() {
                 Theme tokens keep your design consistent in both modes.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
-                <span className="badge">Tokenized UI</span>
+                
                 <span className="badge">Consistent contrast</span>
               </div>
             </div>
