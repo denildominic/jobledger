@@ -81,9 +81,9 @@ export default function Home() {
             Search thousands of jobs, track every stage of your pipeline,
             and{" "}
             <span className="font-semibold" style={{ color: "rgb(var(--fg))" }}>
-              optimize your resume with AI
+              optimize your resume with AI.
             </span>
-            {" "}— all in one place.
+            {" "} All in one place.
           </p>
 
           {/* CTA row */}
@@ -111,9 +111,9 @@ export default function Home() {
           <p className="mt-5 text-xs" style={{ color: "rgb(var(--muted2))" }}>
             Trusted by{" "}
             <span className="font-semibold" style={{ color: "rgb(var(--muted))" }}>
-              2,400+ students
+               students and new grads
             </span>
-            {" "}from 180+ universities
+            {" "}.
           </p>
         </section>
 
