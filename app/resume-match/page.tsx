@@ -16,7 +16,7 @@ export default async function ResumeMatchPage({
 
   // If jobId is present, try to pull the job title from your store
   if (jobId) {
-    const jobs: Job[] = Store.getJobs(); // if this is async, use: const jobs = await Store.getJobs();
+    const jobs: Job[] = Store.getJobs(); 
     const selected = jobs.find((j) => String(j.id) === String(jobId));
     if (selected?.title) initialJobTitle = selected.title;
   }
