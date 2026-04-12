@@ -72,7 +72,7 @@ export default function Home() {
           {/* Headline */}
           <h1 className="mt-8 text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05]">
             <span className="block gradient-text">Make every</span>
-            <span className="block gradient-text">application count</span>
+            <span className="block gradient-text">application count.</span>
           </h1>
 
           {/* Subheading */}
