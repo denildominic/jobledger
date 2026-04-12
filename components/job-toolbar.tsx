@@ -33,7 +33,7 @@ export default function JobToolbar({
           id={searchId}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="Search title, tech, or company…"
+          placeholder="Search title, tech, or company..."
           className="input sm:max-w-sm"
         />
 

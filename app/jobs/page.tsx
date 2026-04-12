@@ -10,7 +10,7 @@ import EmptyState from "@/components/empty-state";
 
 type ApiJob = any;
 
-// helpers to infer normalized signals
+
 const REMOTE_WORDS = [
   "remote",
   "wfh",
