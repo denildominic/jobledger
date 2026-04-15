@@ -235,7 +235,7 @@ export default function JobsPage() {
     return Math.max(...nums);
   };
 
-  // Final visible list (filter + sort)
+  
   const visible = useMemo(() => {
     let arr = jobs;
 
