@@ -262,7 +262,7 @@ export default function JobsPage() {
     return arr;
   }, [jobs, filters, sort]);
 
-  // Ensure selection stays valid
+  
   useEffect(() => {
     if (!visible.length) {
       setSelectedId(null);
