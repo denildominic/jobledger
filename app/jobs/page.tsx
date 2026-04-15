@@ -227,7 +227,7 @@ export default function JobsPage() {
     return () => clearTimeout(id);
   }, [q]);
 
-  // Salary parser for sorting
+  
   const byNumber = (s: string) => {
     const m = String(s || "").match(/(\$|£|€)?\s*([0-9][0-9,]*)/g);
     if (!m) return 0;
