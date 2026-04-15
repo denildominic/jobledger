@@ -256,7 +256,7 @@ export default function JobsPage() {
         );
         break;
       default:
-        arr = [...arr]; // relevant (API order)
+        arr = [...arr]; 
     }
 
     return arr;
