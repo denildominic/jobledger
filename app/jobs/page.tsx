@@ -256,13 +256,13 @@ export default function JobsPage() {
         );
         break;
       default:
-        arr = [...arr]; // relevant (API order)
+        arr = [...arr]; 
     }
 
     return arr;
   }, [jobs, filters, sort]);
 
-  // Ensure selection stays valid
+  
   useEffect(() => {
     if (!visible.length) {
       setSelectedId(null);
