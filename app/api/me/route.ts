@@ -29,7 +29,7 @@ export async function GET() {
         savedJobIds: payload?.user?.savedJobIds ?? [],
       });
     } catch {
-      // fall through to NextAuth
+      
     }
   }
 
