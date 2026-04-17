@@ -22,7 +22,7 @@ export async function GET(req: Request) {
     name: "token",
     value: token,
     httpOnly: true,
-    secure: !isLocal,   // true on Vercel/https, false on localhost
+    secure: !isLocal,   
     sameSite: "lax",
     path: "/",
     maxAge: 60 * 60 * 24 * 30,

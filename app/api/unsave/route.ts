@@ -33,7 +33,7 @@ export async function POST(req: Request) {
   try {
     const jar = await cookies();
 
-    // authorize via NextAuth OR legacy demo token
+    
     const session: any = await getServerSession(authOptions as any);
     const hasNextAuth = Boolean(session?.user?.email);
     const hasLegacyToken = Boolean(jar.get("token")?.value);
