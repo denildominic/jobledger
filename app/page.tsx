@@ -125,7 +125,7 @@ export default function Home() {
               Everything you need
             </p>
             <h2 className="mt-2 text-2xl sm:text-3xl font-bold tracking-tight">
-              Your job search, supercharged
+              Your job search, supercharged.
             </h2>
           </div>
 
@@ -211,8 +211,7 @@ export default function Home() {
                 Theme tokens keep your design pixel-perfect in both modes. Accessibility-first contrast ratios throughout.
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
-                <span className="badge">A+ contrast</span>
-                <span className="badge">WCAG 2.1</span>
+                
               </div>
             </div>
 
