@@ -354,7 +354,7 @@ export default function Home() {
               </h2>
               <p className="mx-auto mt-3 max-w-md text-sm sm:text-base"
                 style={{ color: "rgb(var(--muted))" }}>
-                Join thousands of students who found their path using JobLedger.
+                Find your path using JobLedger.
               </p>
               <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
                 <Link href="/jobs" className="btn px-7 py-2.5 text-sm font-semibold">
