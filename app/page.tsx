@@ -361,7 +361,7 @@ export default function Home() {
                   Start for free
                 </Link>
                 <Link href="/resume-match" className="btn-ghost px-7 py-2.5 text-sm font-semibold">
-                  Try Resume Match
+                  Try Resume Match Feature
                 </Link>
               </div>
             </div>
